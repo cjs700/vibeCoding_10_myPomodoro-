@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="25분 집중과 5분 휴식, 앰비언트 백색소음과 원형 프로그레스 링을 제공하는 모던 포모도로 타이머">
+  <title>FocusFlow - 포모도로 타이머</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-focus">
+  <!-- Dynamic Ambient Background Glow -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-icon">🍅</span>
+        <h1 class="brand-title">FocusFlow</h1>
+      </div>
+      <div class="mode-badge" id="modeBadge">
+        <span class="badge-dot"></span>
+        <span class="badge-text" id="modeBadgeText">🔥 집중 세션</span>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="main-layout">
+      <!-- Section 1: Main Timer Display Card -->
+      <section class="card timer-card">
+        <!-- Circular Progress Ring & Time -->
+        <div class="progress-ring-container">
+          <svg class="progress-ring" viewBox="0 0 320 320">
+            <defs>
+              <linearGradient id="focusGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff6b6b" />
+                <stop offset="100%" stop-color="#ff8e53" />
+              </linearGradient>
+              <linearGradient id="breakGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#38ef7d" />
+              </linearGradient>
+            </defs>
+            <!-- Background Track -->
+            <circle class="ring-track" cx="160" cy="160" r="140" />
+            <!-- Animated Progress Bar -->
+            <circle class="ring-progress" id="ringProgress" cx="160" cy="160" r="140" />
+          </svg>
+
+          <!-- Inside Center Display -->
+          <div class="timer-center-content">
+            <span class="timer-mode-tag" id="timerModeTag">집중 시간</span>
+            <div class="time-display" id="timeDisplay" aria-live="polite">25:00</div>
+            <span class="timer-subtext" id="timerSubtext">목표에 온전히 몰입하세요</span>
+          </div>
+        </div>
+
+        <!-- Timer Action Controls -->
+        <div class="timer-controls">
+          <button class="btn btn-primary" id="btnToggle" aria-label="타이머 시작 및 일시정지">
+            <span class="btn-icon" id="btnToggleIcon">▶</span>
+            <span class="btn-text" id="btnToggleText">시작</span>
+          </button>
+          <button class="btn btn-secondary" id="btnReset" aria-label="타이머 초기화">
+            <span class="btn-icon">↺</span>
+            <span class="btn-text">초기화</span>
+          </button>
+          <button class="btn btn-ghost" id="btnSkip" title="다음 세션으로 건너뛰기" aria-label="다음 세션으로 건너뛰기">
+            <span class="btn-icon">⏭</span>
+            <span class="btn-text">넘기기</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Section 2: White Noise & Sound Settings Card -->
+      <section class="card noise-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="card-icon">🎧</span>
+            <h2 class="card-title">백색소음 앰비언트</h2>
+          </div>
+          <span class="card-subtitle">집중과 힐링을 돕는 자연의 소리</span>
+        </div>
+
+        <!-- Sound Selector Options -->
+        <div class="sound-selector" id="soundSelector" role="radiogroup" aria-label="백색소음 선택">
+          <button class="sound-chip active" data-sound="off" role="radio" aria-checked="true">
+            <span class="chip-icon">🔇</span>
+            <span class="chip-label">무음</span>
+          </button>
+          <button class="sound-chip" data-sound="waves" role="radio" aria-checked="false">
+            <span class="chip-icon">🌊</span>
+            <span class="chip-label">파도</span>
+          </button>
+          <button class="sound-chip" data-sound="rain" role="radio" aria-checked="false">
+            <span class="chip-icon">🌧️</span>
+            <span class="chip-label">보슬비</span>
+          </button>
+          <button class="sound-chip" data-sound="birds" role="radio" aria-checked="false">
+            <span class="chip-icon">🌲</span>
+            <span class="chip-label">새소리</span>
+          </button>
+        </div>
+
+        <!-- Volume Controller -->
+        <div class="volume-control-box">
+          <button class="btn-icon-toggle" id="btnMute" title="음소거 토글" aria-label="음소거 토글">
+            <span id="muteIcon">🔊</span>
+          </button>
+          <div class="slider-wrapper">
+            <input type="range" id="volumeSlider" min="0" max="100" value="70" class="volume-slider" aria-label="음량 조절">
+          </div>
+          <span class="volume-value" id="volumeValue">70%</span>
+        </div>
+      </section>
+
+      <!-- Section 3: Session Counter Card -->
+      <section class="card stats-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="card-icon">📊</span>
+            <h2 class="card-title">오늘의 집중 기록</h2>
+          </div>
+          <button class="btn-text-action" id="btnResetSessions" title="기록 초기화">리셋</button>
+        </div>
+
+        <div class="stats-summary">
+          <div class="stats-number-box">
+            <span class="stats-big-number" id="completedCount">0</span>
+            <span class="stats-unit">회 완료</span>
+          </div>
+          <div class="stats-details">
+            <p class="stats-time-text">누적 집중 시간: <strong id="totalFocusTime">0분</strong></p>
+            <p class="stats-desc-text">25분 세션을 완료할 때마다 자동 기록됩니다.</p>
+          </div>
+        </div>
+
+        <!-- Visual Tomato Badges Container -->
+        <div class="tomato-badges" id="tomatoBadges" aria-label="완료한 뽀모도로 배지 목록">
+          <span class="empty-badge-text">첫 번째 집중 세션을 완료해 보세요! 🔥</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>단축키: <kbd>Space</kbd> 시작/정지 · <kbd>R</kbd> 초기화 · <kbd>S</kbd> 건너뛰기</p>
+      <p class="copyright">FocusFlow Pomodoro Timer &copy; 2026. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- Audio elements & Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
